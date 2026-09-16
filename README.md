@@ -1,42 +1,82 @@
-# sv
+# HangingTree
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+# ❓ What is this 
 
-## Creating a project
+This is a very simple web application built with [SvelteKit](https://svelte.dev/docs/kit/creating-a-project). <br>
+The main purpose of this project is to test our teamwork skills.  <br>
+The app serves university purposes only.
 
-If you're seeing this, you've probably already done this step. Congrats!
+# 👨🏿‍🎓 For teammates
 
-```sh
-# create a new project
-npx sv create my-app
+
+## 🧑‍💻 Dev
+Use this to start the dev server: 
+```
+bun run dev
 ```
 
-To recreate this project with the same configuration:
-
-```sh
-# recreate this project
-bun x sv@0.17.0 create --template minimal --types ts --install bun HangingTreep
+Use this to install missing dependencies:
+```
+bun install
 ```
 
-## Developing
+## 🆚 VCS
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+Clone the project:
+```
+git clone https://github.com/6gDav/HangingTree
 ```
 
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
+Navigate to the folder:
+```
+cd HangingTree
 ```
 
-You can preview the production build with `npm run preview`.
+> ❗️ Do not delete the *.git* folder.
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+### Create your own branch
+
+Checkout from the main branch:
+```
+git checkout main
+```
+
+Update the code:
+```
+git pull origin main
+```
+
+Create your own branch: 
+```
+git checkout -b <your-branch-name>
+```
+
+Push changes
+<hr>
+
+Add all changes:
+```
+git add .
+```
+
+Create a commit with the changes:
+```
+git commit -m "your commit message"
+```
+
+Push the changes:
+```
+git push -u origin <your-branch-name>
+```
+
+Pull the changes:
+
+Change to the main branch:
+```
+git checkout main
+```
+
+Pull the latest changes:
+```
+git pull origin main
+```
