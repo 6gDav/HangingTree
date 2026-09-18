@@ -80,3 +80,16 @@ Pull the latest changes:
 ```
 git pull origin main
 ```
+
+## 💬 Conventional Commits
+
+| Prefix | Description |
+| :--- | :---: |
+| feat | New feature |
+| fix | Bug fix | 
+| docs | Documentation only |
+| style | CSS changes and code formatting | 
+| refactor | Code restructuring without adding features or fixes |
+| perf | Performance optimization | 
+| test | Testing |
+| chore | Maintenance, dependencies, tooling, etc | 
