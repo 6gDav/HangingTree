@@ -16,7 +16,7 @@
 
     let inputChar: string = $state<string>("");
 
-    function submintCharacter() {
+    function submitCharacter() {
         console.log("Submit clicked")
     }
 
@@ -28,4 +28,4 @@
 <p>debug: a kitalálandó szó: {selected_word}</p>
 
 <input type="text" maxlength="1" bind:value={inputChar}> <br>
-<button onclick={() => submintCharacter}>Submint your try</button>
+<button onclick={() => submitCharacter}>Submint your try</button>
