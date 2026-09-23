@@ -16,21 +16,22 @@
 
     let inputChar: string = $state<string>("");
 
-    let errorCounter: number = 0;
+    let errorCounter: number = $state<number>(0);
 
     function submitCharacter() {
-        inputChar = ""
-        if (inputChar) {
-            const isSingleBitRegex: boolean = /^[01]$/.test(inputChar);
+        console.log("exc");
 
-            if (isSingleBitRegex) {
-                if (selected_word.includes(inputChar)) {
-                    //succesfull logic
-                } else {
-                    errorCounter++;
-                }
+        const char = inputChar.toLowerCase();
+
+        if (char && /^[a-z]$/.test(char)) {
+            if (selected_word.includes(char)) {
+                // succes logika
+            } else {
+                errorCounter++;
+                console.log(errorCounter);
             }
         }
+        inputChar = "";
     }
 </script>
 
@@ -39,9 +40,10 @@
 <br />
 <p>debug: a kitalálandó szó: {selected_word}</p>
 
-<div>
-    <img src="../lib/assets/hangman_states/a{errorCounter}.png">
-</div>
+<img
+    src="/hangman_states/a{errorCounter}.png"
+    alt="Hangman state {errorCounter}"
+/>
 
 <input type="text" maxlength="1" bind:value={inputChar} /> <br />
-<button on:click={submitCharacter}>Submit your try</button>
+<button onclick={() => submitCharacter()}>Submit your try</button>
