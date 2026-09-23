@@ -16,6 +16,8 @@
 
     let inputChar: string = $state<string>("");
 
+    let includedChars: string[] = $state<string[]>([]);
+
     let errorCounter: number = $state<number>(0);
 
     function submitCharacter() {
@@ -25,12 +27,13 @@
 
         if (char && /^[a-z]$/.test(char)) {
             if (selected_word.includes(char)) {
-                // succes logika
+                includedChars.push(char);
             } else {
                 errorCounter++;
                 console.log(errorCounter);
             }
         }
+        console.log(includedChars);
         inputChar = "";
     }
 </script>
@@ -44,6 +47,14 @@
     src="/hangman_states/a{errorCounter}.png"
     alt="Hangman state {errorCounter}"
 />
+
+{#each selected_word as char}
+    {#if includedChars.includes(char)}
+        <div>{char}</div>
+    {:else}
+        <div>_</div>
+    {/if}
+{/each}
 
 <input type="text" maxlength="1" bind:value={inputChar} /> <br />
 <button onclick={() => submitCharacter()}>Submit your try</button>
