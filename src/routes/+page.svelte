@@ -39,5 +39,9 @@
 <br />
 <p>debug: a kitalálandó szó: {selected_word}</p>
 
+<div>
+    <img src="../lib/assets/hangman_states/a{errorCounter}.png">
+</div>
+
 <input type="text" maxlength="1" bind:value={inputChar} /> <br />
 <button on:click={submitCharacter}>Submit your try</button>
