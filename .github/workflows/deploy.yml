@@ -1,0 +1,46 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: 'main'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'pages'
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Bun setup
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest 
+
+      - name: Download packages
+        run: bun install --frozen-lockfile
+
+      - name: Build SvelteKit projekt
+        env:
+          BASE_PATH: '/${{ github.event.repository.name }}'
+        run: bun run build
+
+      - name: Upload pages setup
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'build/'
+
+      - name: Publis on HitHub
+        id: deployment
+        uses: actions/deploy-pages@v4

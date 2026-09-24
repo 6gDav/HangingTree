@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { base } from '$app/paths';
+
     const words: string[] = [
         "programming",
         "typescript",
@@ -44,7 +46,7 @@
 <p>debug: a kitalálandó szó: {selected_word}</p>
 
 <img
-    src="/hangman_states/a{errorCounter}.png"
+    src="{base}/hangman_states/a{errorCounter}.png"
     alt="Hangman state {errorCounter}"
 />
 
