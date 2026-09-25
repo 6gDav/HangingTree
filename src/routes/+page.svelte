@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { base } from '$app/paths';
+    import { base } from "$app/paths";
 
     const words: string[] = [
         "programming",
@@ -14,13 +14,26 @@
         "variable",
     ];
 
-    let selected_word: string = words[Math.floor(Math.random() * words.length)];
+    let selected_word: string = $state<string>(words[Math.floor(Math.random() * words.length)]);
 
     let inputChar: string = $state<string>("");
 
     let includedChars: string[] = $state<string[]>([]);
 
     let errorCounter: number = $state<number>(0);
+
+    let isWon = $derived(
+        selected_word.split("").every((char) => includedChars.includes(char)),
+    );
+
+    $effect(() => {
+        if (isWon) {
+            selected_word = words[Math.floor(Math.random() * words.length)];
+            includedChars = [];
+            errorCounter = 0;
+            alert("Victory!");
+        }
+    });
 
     function submitCharacter() {
         console.log("exc");
@@ -29,7 +42,9 @@
 
         if (char && /^[a-z]$/.test(char)) {
             if (selected_word.includes(char)) {
-                includedChars.push(char);
+                if (!includedChars.includes(char)) {
+                    includedChars.push(char);
+                }
             } else {
                 errorCounter++;
                 console.log(errorCounter);
