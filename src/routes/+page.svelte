@@ -21,6 +21,8 @@
     let inputChar: string = $state<string>("");
 
     let includedChars: string[] = $state<string[]>([]);
+    
+    let excludedChars: string[] = $state<string[]>([]);
 
     let errorCounter: number = $state<number>(0);
 
@@ -28,12 +30,21 @@
         selected_word.split("").every((char) => includedChars.includes(char)),
     );
 
+    let isLost = $derived(errorCounter >= 12);
+
     $effect(() => {
-        if (isWon) {
+        const reset = () => {
             selected_word = words[Math.floor(Math.random() * words.length)];
             includedChars = [];
             errorCounter = 0;
+        };
+
+        if (isWon) {
+            reset();
             alert("Victory!");
+        } else if (isLost) {
+            reset();
+            alert("Game Over!");
         }
     });
 
@@ -53,8 +64,11 @@
                     includedChars.push(char);
                 }
             } else {
-                errorCounter++;
-                console.log(errorCounter);
+
+                if (!excludedChars.includes(char)) {
+                    errorCounter++;
+                    excludedChars.push(char)
+                }
             }
         }
         console.log(includedChars);
