@@ -14,7 +14,9 @@
         "variable",
     ];
 
-    let selected_word: string = $state<string>(words[Math.floor(Math.random() * words.length)]);
+    let selected_word: string = $state<string>(
+        words[Math.floor(Math.random() * words.length)],
+    );
 
     let inputChar: string = $state<string>("");
 
@@ -34,6 +36,11 @@
             alert("Victory!");
         }
     });
+
+    function handleSubmit(event: SubmitEvent) {
+        event.preventDefault();
+        submitCharacter();
+    }
 
     function submitCharacter() {
         console.log("exc");
@@ -73,5 +80,8 @@
     {/if}
 {/each}
 
-<input type="text" maxlength="1" bind:value={inputChar} /> <br />
-<button onclick={() => submitCharacter()}>Submit your try</button>
+<form onsubmit={(e: SubmitEvent) => handleSubmit(e)}>
+    <input type="text" maxlength="1" bind:value={inputChar} />
+    <br />
+    <button onclick={() => submitCharacter()}>Submit your try</button>
+</form>
