@@ -87,10 +87,16 @@
 />
 
 {#each selected_word as char}
+    {#if excludedChars.includes(char)}
+        <span class="excludedChars">{char}</span>
+    {/if}
+{/each}
+
+{#each selected_word as char}
     {#if includedChars.includes(char)}
-        <div>{char}</div>
+        <span class="includedChars">{char}</span>
     {:else}
-        <div>_</div>
+        <span>_</span>
     {/if}
 {/each}
 
