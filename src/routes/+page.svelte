@@ -19,6 +19,7 @@
     );
 
     let inputChar: string = $state<string>("");
+    let guessText: string = $state<string>("");
 
     let includedChars: string[] = $state<string[]>([]);
 
@@ -32,13 +33,15 @@
 
     let isLost = $derived(errorCounter >= 12);
 
-    $effect(() => {
-        const reset = () => {
-            selected_word = words[Math.floor(Math.random() * words.length)];
-            includedChars = [];
-            errorCounter = 0;
-        };
+    function reset() {
+        selected_word = words[Math.floor(Math.random() * words.length)];
+        includedChars = [];
+        errorCounter = 0;
+        inputChar = "";
+        guessText = "";
+    };
 
+    $effect(() => {
         if (isWon) {
             reset();
             alert("Victory!");
@@ -51,11 +54,10 @@
     function handleSubmit(event: SubmitEvent) {
         event.preventDefault();
         submitCharacter();
+        submitGuess();
     }
 
     function submitCharacter() {
-        console.log("exc");
-
         const char = inputChar.toLowerCase();
 
         if (char && /^[a-z]$/.test(char)) {
@@ -73,14 +75,20 @@
         console.log(includedChars);
         inputChar = "";
     }
+
+    function submitGuess() {
+        const guess = guessText.toLowerCase();
+
+        if (guess === selected_word) {
+            reset()
+            alert("Victory!");
+        }
+    }
 </script>
 
 <main>
-    <h1 style="font-size: 55px;">HangingTree</h1>
-    <p>Main content here</p>
-    <br />
-    <p>debug: a kitalálandó szó: {selected_word}</p>
-
+    <h1>HangingTree</h1>
+    <p>{selected_word}</p>
     <img
         src="{base}/hangman_states/a{errorCounter}.png"
         alt="Hangman state {errorCounter}"
@@ -101,13 +109,17 @@
     {/each}
 
     <form onsubmit={(e: SubmitEvent) => handleSubmit(e)}>
+        <h2>Character?</h2>
         <input type="text" maxlength="1" bind:value={inputChar} />
         <br />
         <button onclick={() => submitCharacter()}>Submit your try</button>
     </form>
+    <hr />
     <form action="">
         <h2>Guess?</h2>
-        <input type="text" maxlength="1" />
+        <input type="text" bind:value={guessText} />
+        <br />
+        <button onclick={() => submitGuess()}>Submit your guess</button>
     </form>
 </main>
 
@@ -139,8 +151,8 @@
         color: #27272a;
     }
 
-    p {
-        color: #52525b;
+    h2 {
+        font-style: italic;
     }
 
     img {
