@@ -86,43 +86,6 @@
     }
 </script>
 
-<main>
-    <h1>HangingTree</h1>
-    <p>{selected_word}</p>
-    <img
-        src="{base}/hangman_states/a{errorCounter}.png"
-        alt="Hangman state {errorCounter}"
-    />
-
-    {#each selected_word as char}
-        {#if excludedChars.includes(char)}
-            <span class="excludedChars">{char}</span>
-        {/if}
-    {/each}
-
-    {#each selected_word as char}
-        {#if includedChars.includes(char)}
-            <span class="includedChars">{char}</span>
-        {:else}
-            <span>_</span>
-        {/if}
-    {/each}
-
-    <form onsubmit={(e: SubmitEvent) => handleSubmit(e)}>
-        <h2>Character?</h2>
-        <input type="text" maxlength="1" bind:value={inputChar} />
-        <br />
-        <button onclick={() => submitCharacter()}>Submit your try</button>
-    </form>
-    <hr />
-    <form action="">
-        <h2>Guess?</h2>
-        <input type="text" bind:value={guessText} style="width=500px;" />
-        <br />
-        <button onclick={() => submitGuess()}>Submit your guess</button>
-    </form>
-</main>
-
 <style>
     :global(body) {
         margin: 0;
@@ -219,3 +182,40 @@
         transform: translateY(1px);
     }
 </style>
+
+<main>
+    <h1>HangingTree</h1>
+    <p>{selected_word}</p>
+    <img
+        src="{base}/hangman_states/a{errorCounter}.png"
+        alt="Hangman state {errorCounter}"
+    />
+
+    {#each selected_word as char}
+        {#if excludedChars.includes(char)}
+            <span class="excludedChars">{char}</span>
+        {/if}
+    {/each}
+
+    {#each selected_word as char}
+        {#if includedChars.includes(char)}
+            <span class="includedChars">{char}</span>
+        {:else}
+            <span>_</span>
+        {/if}
+    {/each}
+
+    <form onsubmit={(e: SubmitEvent) => handleSubmit(e)}>
+        <h2>Character?</h2>
+        <input type="text" maxlength="1" bind:value={inputChar} />
+        <br />
+        <button onclick={() => submitCharacter()}>Submit your try</button>
+    </form>
+    <hr />
+    <form action="">
+        <h2>Guess?</h2>
+        <input type="text" bind:value={guessText} style="width=500px;" />
+        <br />
+        <button onclick={() => submitGuess()}>Submit your guess</button>
+    </form>
+</main>
