@@ -116,7 +116,7 @@
     <hr />
     <form action="">
         <h2>Guess?</h2>
-        <input class="guss-input" type="text" bind:value={guessText} />
+        <input class="guess-input" type="text" bind:value={guessText} />
         <br />
         <button onclick={() => submitGuess()}>Submit your guess</button>
     </form>
@@ -227,7 +227,7 @@
         color: red;
     }
 
-    .guss-input {
+    .guess-input {
         width: 150px;
     }
 </style>
