@@ -14,7 +14,7 @@
         "variable",
     ];
 
-    let selected_word: string = $state<string>(
+    let selectedWorld: string = $state<string>(
         words[Math.floor(Math.random() * words.length)],
     );
 
@@ -28,18 +28,19 @@
     let errorCounter: number = $state<number>(0);
 
     let isWon = $derived(
-        selected_word.split("").every((char) => includedChars.includes(char)),
+        selectedWorld.split("").every((char) => includedChars.includes(char)),
     );
 
     let isLost = $derived(errorCounter >= 12);
 
     function reset() {
-        selected_word = words[Math.floor(Math.random() * words.length)];
+        selectedWorld = words[Math.floor(Math.random() * words.length)];
         includedChars = [];
+        excludedChars = [];
         errorCounter = 0;
         inputChar = "";
         guessText = "";
-    };
+    }
 
     $effect(() => {
         if (isWon) {
@@ -61,7 +62,7 @@
         const char = inputChar.toLowerCase();
 
         if (char && /^[a-z]$/.test(char)) {
-            if (selected_word.includes(char)) {
+            if (selectedWorld.includes(char)) {
                 if (!includedChars.includes(char)) {
                     includedChars.push(char);
                 }
@@ -79,12 +80,47 @@
     function submitGuess() {
         const guess = guessText.toLowerCase();
 
-        if (guess === selected_word) {
-            reset()
+        if (guess === selectedWorld) {
+            reset();
             alert("Victory!");
         }
     }
 </script>
+
+<main>
+    <h1>HangingTree</h1>
+    <p>{selectedWorld}</p>
+    <img
+        src="{base}/hangman_states/a{errorCounter}.png"
+        alt="Hangman state {errorCounter}"
+    />
+
+    {#each excludedChars as char}
+        <span class="excludedChars">{char + ";"}</span>
+    {/each}
+    <br />
+    {#each selectedWorld as char}
+        {#if includedChars.includes(char)}
+            <span class="excluded-chars">{char}</span>
+        {:else}
+            <span>_</span>
+        {/if}
+    {/each}
+
+    <form onsubmit={(e: SubmitEvent) => handleSubmit(e)}>
+        <h2>Character?</h2>
+        <input type="text" maxlength="1" bind:value={inputChar} />
+        <br />
+        <button onclick={() => submitCharacter()}>Submit your try</button>
+    </form>
+    <hr />
+    <form action="">
+        <h2>Guess?</h2>
+        <input class="guss-input" type="text" bind:value={guessText} />
+        <br />
+        <button onclick={() => submitGuess()}>Submit your guess</button>
+    </form>
+</main>
 
 <style>
     :global(body) {
@@ -124,6 +160,11 @@
         height: 250px;
         object-fit: contain;
         margin: 20px auto;
+    }
+
+    span {
+        display: inline-block;
+        margin: 0 4px;
     }
 
     :global(.word) {
@@ -181,41 +222,12 @@
     button:active {
         transform: translateY(1px);
     }
+
+    .excluded-chars {
+        color: red;
+    }
+
+    .guss-input {
+        width: 150px;
+    }
 </style>
-
-<main>
-    <h1>HangingTree</h1>
-    <p>{selected_word}</p>
-    <img
-        src="{base}/hangman_states/a{errorCounter}.png"
-        alt="Hangman state {errorCounter}"
-    />
-
-    {#each selected_word as char}
-        {#if excludedChars.includes(char)}
-            <span class="excludedChars">{char}</span>
-        {/if}
-    {/each}
-
-    {#each selected_word as char}
-        {#if includedChars.includes(char)}
-            <span class="includedChars">{char}</span>
-        {:else}
-            <span>_</span>
-        {/if}
-    {/each}
-
-    <form onsubmit={(e: SubmitEvent) => handleSubmit(e)}>
-        <h2>Character?</h2>
-        <input type="text" maxlength="1" bind:value={inputChar} />
-        <br />
-        <button onclick={() => submitCharacter()}>Submit your try</button>
-    </form>
-    <hr />
-    <form action="">
-        <h2>Guess?</h2>
-        <input type="text" bind:value={guessText} style="width=500px;" />
-        <br />
-        <button onclick={() => submitGuess()}>Submit your guess</button>
-    </form>
-</main>
