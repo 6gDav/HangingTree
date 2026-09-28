@@ -94,12 +94,12 @@
     />
 
     {#each excludedChars as char}
-        <span class="excludedChars">{char + ";"}</span>
+        <span class="excluded-chars">{char + ";"}</span>
     {/each}
     <br />
     {#each selectedWorld as char}
         {#if includedChars.includes(char)}
-            <span class="excluded-chars">{char}</span>
+            <span>{char}</span>
         {:else}
             <span>_</span>
         {/if}
