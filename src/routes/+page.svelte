@@ -73,7 +73,6 @@
                 }
             }
         }
-        console.log(includedChars);
         inputChar = "";
     }
 
@@ -89,7 +88,6 @@
 
 <main>
     <h1>HangingTree</h1>
-    <p>{selectedWorld}</p>
     <img
         src="{base}/hangman_states/a{errorCounter}.png"
         alt="Hangman state {errorCounter}"
