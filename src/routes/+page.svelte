@@ -1,7 +1,7 @@
 <script lang="ts">
     import { base } from "$app/paths";
 
-    const words: string[] = [
+    const words: string[] =  $state<string[]>([
         "programming",
         "typescript",
         "svelte",
@@ -12,7 +12,7 @@
         "algorithm",
         "function",
         "variable",
-    ];
+    ]);
 
     let selectedWorld: string = $state<string>(
         words[Math.floor(Math.random() * words.length)],
