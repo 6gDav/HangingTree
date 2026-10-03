@@ -18,8 +18,6 @@
         words[Math.floor(Math.random() * words.length)],
     );
 
-    console.log("kitalálandó szó: "+selectedWord);
-
     let inputChar: string = $state<string>("");
     let guessText: string = $state<string>("");
 
