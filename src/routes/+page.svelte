@@ -14,9 +14,11 @@
         "variable",
     ]);
 
-    let selectedWorld: string = $state<string>(
+    let selectedWord: string = $state<string>(
         words[Math.floor(Math.random() * words.length)],
     );
+
+    console.log("kitalálandó szó: "+selectedWord);
 
     let inputChar: string = $state<string>("");
     let guessText: string = $state<string>("");
@@ -28,13 +30,13 @@
     let errorCounter: number = $state<number>(0);
 
     let isWon = $derived(
-        selectedWorld.split("").every((char) => includedChars.includes(char)),
+        selectedWord.split("").every((char) => includedChars.includes(char)),
     );
 
     let isLost = $derived(errorCounter >= 12);
 
     function reset() {
-        selectedWorld = words[Math.floor(Math.random() * words.length)];
+        selectedWord = words[Math.floor(Math.random() * words.length)];
         includedChars = [];
         excludedChars = [];
         errorCounter = 0;
@@ -62,7 +64,7 @@
         const char = inputChar.toLowerCase();
 
         if (char && /^[a-z]$/.test(char)) {
-            if (selectedWorld.includes(char)) {
+            if (selectedWord.includes(char)) {
                 if (!includedChars.includes(char)) {
                     includedChars.push(char);
                 }
@@ -79,7 +81,7 @@
     function submitGuess() {
         const guess = guessText.toLowerCase();
 
-        if (guess === selectedWorld) {
+        if (guess === selectedWord) {
             reset();
             alert("Victory!");
         }
@@ -97,7 +99,7 @@
         <span class="excluded-chars">{char + ";"}</span>
     {/each}
     <br />
-    {#each selectedWorld as char}
+    {#each selectedWord as char}
         {#if includedChars.includes(char)}
             <span>{char}</span>
         {:else}
