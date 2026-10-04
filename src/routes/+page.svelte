@@ -94,7 +94,7 @@
     />
 
     {#each excludedChars as char}
-        <span class="excluded-chars">{char + ";"}</span>
+        <span class="excluded-chars">{char}</span>
     {/each}
     <br />
     {#each selectedWord as char}
@@ -203,7 +203,7 @@
         padding: 14px;
         border-radius: 24px;
         border: 1px solid rgba(129,140,248,.25);
-        background: rgba(2,6,23,.65);
+        background: rgba(22,26,43,.65);
         box-shadow: 0 0 35px rgba(99,102,241,.18), inset 0 0 30px rgba(0,0,0,.35);
         transition: transform .25s ease, box-shadow .25s ease;
     }
