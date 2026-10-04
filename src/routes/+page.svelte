@@ -82,6 +82,9 @@
         if (guess === selectedWord) {
             reset();
             alert("Victory!");
+        } else if (guess !== "" && guess !== selectedWord) {
+            alert("Not Matching!");
+            guessText = "";
         }
     }
 </script>
@@ -112,7 +115,7 @@
         <button onclick={() => submitCharacter()}>Submit your try</button>
     </form>
     <hr />
-    <form action="">
+    <form onsubmit={(e: SubmitEvent) => handleSubmit(e)}>
         <h2>Guess?</h2>
         <input class="guess-input" type="text" bind:value={guessText} />
         <br />
