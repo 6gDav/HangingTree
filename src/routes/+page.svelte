@@ -1,89 +1,52 @@
 <script lang="ts">
-    import { base } from "$app/paths";
+    import { WordLogic } from "$lib/components/manageSelectedWolrd.svelte";
 
-    const words: string[] =  $state<string[]>([
-        "programming",
-        "typescript",
-        "svelte",
-        "javascript",
-        "frontend",
-        "backend",
-        "developer",
-        "algorithm",
-        "function",
-        "variable",
-    ]);
+    import ImageManagger from "$lib/components/menageImage.svelte";
+    import ExcludedManagger from "$lib/components/manageExcludedChars.svelte";
+    import IncludedManagger from "$lib/components/manageIncludedChard.svelte"
 
-    let selectedWord: string = $state<string>(
-        words[Math.floor(Math.random() * words.length)],
-    );
+    
+    const wolrdLogic: WordLogic = new WordLogic();
 
     let inputChar: string = $state<string>("");
     let guessText: string = $state<string>("");
 
-    let includedChars: string[] = $state<string[]>([]);
-
-    let excludedChars: string[] = $state<string[]>([]);
-
-    let errorCounter: number = $state<number>(0);
-
-    let isWon = $derived(
-        selectedWord.split("").every((char) => includedChars.includes(char)),
-    );
-
-    let isLost = $derived(errorCounter >= 12);
-
     function reset() {
-        selectedWord = words[Math.floor(Math.random() * words.length)];
-        includedChars = [];
-        excludedChars = [];
-        errorCounter = 0;
+        wolrdLogic.reset();
         inputChar = "";
         guessText = "";
     }
 
     $effect(() => {
-        if (isWon) {
+        if (wolrdLogic.isWon()) {
             reset();
             alert("Victory!");
-        } else if (isLost) {
+        } else if (wolrdLogic.isLost()) {
             reset();
             alert("Game Over!");
         }
     });
 
-    function handleSubmit(event: SubmitEvent) {
+    function handleCharSubmit(event: SubmitEvent) {
         event.preventDefault();
-        submitCharacter();
-        submitGuess();
-    }
+        if (!inputChar.trim()) return;
 
-    function submitCharacter() {
-        const char = inputChar.toLowerCase();
-
-        if (char && /^[a-z]$/.test(char)) {
-            if (selectedWord.includes(char)) {
-                if (!includedChars.includes(char)) {
-                    includedChars.push(char);
-                }
-            } else {
-                if (!excludedChars.includes(char)) {
-                    errorCounter++;
-                    excludedChars.push(char);
-                }
-            }
-        }
+        wolrdLogic.submitCharacter(inputChar);
         inputChar = "";
     }
 
-    function submitGuess() {
-        const guess = guessText.toLowerCase();
+    function handleGuessSubmit(event: SubmitEvent) {
+        event.preventDefault();
 
-        if (guess === selectedWord) {
-            reset();
-            alert("Victory!");
-        } else if (guess !== "" && guess !== selectedWord) {
-            alert("Not Matching!");
+        if (guessText.trim()) {
+            const [case1, case2] = wolrdLogic.submitGuess(guessText);
+
+            if (case1) {
+                reset();
+                alert("Victory!");
+            } else if (case2) {
+                alert("Not Matching!");
+            }
             guessText = "";
         }
     }
@@ -91,40 +54,32 @@
 
 <main>
     <h1>HangingTree</h1>
-    <img
-        src="{base}/hangman_states/a{errorCounter}.png"
-        alt="Hangman state {errorCounter}"
-    />
 
-    {#each excludedChars as char}
-        <span class="excluded-chars">{char}</span>
-    {/each}
+    <ImageManagger {wolrdLogic} />
+
+    <ExcludedManagger {wolrdLogic} />
     <br />
-    {#each selectedWord as char}
-        {#if includedChars.includes(char)}
-            <span>{char}</span>
-        {:else}
-            <span>_</span>
-        {/if}
-    {/each}
+    <IncludedManagger {wolrdLogic} />
 
-    <form onsubmit={(e: SubmitEvent) => handleSubmit(e)}>
+    <form onsubmit={(e: SubmitEvent) => handleCharSubmit(e)}>
         <h2>Character?</h2>
         <input type="text" maxlength="1" bind:value={inputChar} />
         <br />
-        <button onclick={() => submitCharacter()}>Submit your try</button>
+        <button type="submit">Submit your try</button>
     </form>
     <hr />
-    <form onsubmit={(e: SubmitEvent) => handleSubmit(e)}>
+    <form onsubmit={(e: SubmitEvent) => handleGuessSubmit(e)}>
         <h2>Guess?</h2>
         <input class="guess-input" type="text" bind:value={guessText} />
         <br />
-        <button onclick={() => submitGuess()}>Submit your guess</button>
+        <button type="submit">Submit your guess</button>
     </form>
 </main>
 
 <style>
-    :global(*) { box-sizing: border-box; }
+    :global(*) {
+        box-sizing: border-box;
+    }
 
     :global(body) {
         margin: 0;
@@ -132,10 +87,19 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-family:
+            Inter,
+            system-ui,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
         color: #f8fafc;
-        background:
-            radial-gradient(circle at 15% 15%, #312e81 0, transparent 32%),
+        background: radial-gradient(
+                circle at 15% 15%,
+                #312e81 0,
+                transparent 32%
+            ),
             radial-gradient(circle at 85% 85%, #581c87 0, transparent 30%),
             linear-gradient(135deg, #070711, #111827 55%, #09090f);
         overflow-x: hidden;
@@ -146,7 +110,15 @@
         position: fixed;
         inset: 0;
         pointer-events: none;
-        background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+        background-image: linear-gradient(
+                rgba(255, 255, 255, 0.025) 1px,
+                transparent 1px
+            ),
+            linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.025) 1px,
+                transparent 1px
+            );
         background-size: 40px 40px;
         mask-image: linear-gradient(to bottom, black, transparent);
     }
@@ -157,11 +129,13 @@
         margin: 40px 0;
         padding: 42px;
         text-align: center;
-        border: 1px solid rgba(255,255,255,.12);
+        border: 1px solid rgba(255, 255, 255, 0.12);
         border-radius: 28px;
-        background: rgba(15,23,42,.78);
+        background: rgba(15, 23, 42, 0.78);
         backdrop-filter: blur(20px);
-        box-shadow: 0 30px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.08);
+        box-shadow:
+            0 30px 80px rgba(0, 0, 0, 0.55),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08);
     }
 
     h1 {
@@ -174,7 +148,7 @@
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
-        text-shadow: 0 0 35px rgba(129,140,248,.25);
+        text-shadow: 0 0 35px rgba(129, 140, 248, 0.25);
         animation: titleGlow 5s ease infinite;
     }
 
@@ -197,63 +171,24 @@
         color: #cbd5e1;
     }
 
-    img {
-        display: block;
-        width: 270px;
-        height: 270px;
-        object-fit: contain;
-        margin: 22px auto 28px;
-        padding: 14px;
-        border-radius: 24px;
-        border: 1px solid rgba(129,140,248,.25);
-        background: rgba(22,26,43,.65);
-        box-shadow: 0 0 35px rgba(99,102,241,.18), inset 0 0 30px rgba(0,0,0,.35);
-        transition: transform .25s ease, box-shadow .25s ease;
-    }
-
-    img:hover {
-        transform: translateY(-4px) scale(1.02);
-        box-shadow: 0 0 50px rgba(99,102,241,.3), inset 0 0 30px rgba(0,0,0,.35);
-    }
-
-    span { display: inline-block; margin: 0 5px; }
-
-    main > span:not(.excluded-chars) {
-        min-width: 28px;
-        padding: 0 5px 8px;
-        margin: 4px;
-        font-size: 30px;
-        font-weight: 800;
-        border-bottom: 3px solid #6366f1;
-        color: #f8fafc;
-        text-shadow: 0 0 15px rgba(129,140,248,.55);
-    }
-
-    .excluded-chars {
-        margin: 3px;
-        padding: 5px 10px;
-        border-radius: 999px;
-        color: #fda4af;
-        background: rgba(244,63,94,.1);
-        border: 1px solid rgba(244,63,94,.25);
-        font-size: 14px;
-        font-weight: 700;
-        text-transform: uppercase;
-    }
-
     form {
         margin-top: 34px;
         padding: 24px;
-        border: 1px solid rgba(255,255,255,.08);
+        border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 20px;
-        background: rgba(255,255,255,.035);
+        background: rgba(255, 255, 255, 0.035);
     }
 
     hr {
         margin: 24px 0;
         border: 0;
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(129,140,248,.45), transparent);
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(129, 140, 248, 0.45),
+            transparent
+        );
     }
 
     input {
@@ -263,19 +198,23 @@
         font-size: 28px;
         font-weight: 800;
         color: #f8fafc;
-        background: rgba(2,6,23,.75);
+        background: rgba(2, 6, 23, 0.75);
         border: 2px solid #334155;
         border-radius: 14px;
         outline: none;
-        transition: .2s ease;
+        transition: 0.2s ease;
     }
 
-    input:hover { border-color: #6366f1; }
+    input:hover {
+        border-color: #6366f1;
+    }
 
     input:focus {
         border-color: #818cf8;
         transform: translateY(-2px);
-        box-shadow: 0 0 0 4px rgba(99,102,241,.15), 0 0 25px rgba(99,102,241,.25);
+        box-shadow:
+            0 0 0 4px rgba(99, 102, 241, 0.15),
+            0 0 25px rgba(99, 102, 241, 0.25);
     }
 
     .guess-input {
@@ -288,37 +227,57 @@
     button {
         margin-top: 15px;
         padding: 12px 28px;
-        border: 1px solid rgba(255,255,255,.14);
+        border: 1px solid rgba(255, 255, 255, 0.14);
         border-radius: 12px;
         background: linear-gradient(135deg, #6366f1, #8b5cf6);
         color: white;
         font-size: 15px;
         font-weight: 800;
-        letter-spacing: .5px;
+        letter-spacing: 0.5px;
         cursor: pointer;
-        box-shadow: 0 8px 25px rgba(99,102,241,.28);
-        transition: all .2s ease;
+        box-shadow: 0 8px 25px rgba(99, 102, 241, 0.28);
+        transition: all 0.2s ease;
     }
 
     button:hover {
         transform: translateY(-3px);
-        box-shadow: 0 12px 32px rgba(99,102,241,.4), 0 0 20px rgba(139,92,246,.2);
+        box-shadow:
+            0 12px 32px rgba(99, 102, 241, 0.4),
+            0 0 20px rgba(139, 92, 246, 0.2);
         filter: brightness(1.08);
     }
 
-    button:active { transform: translateY(0) scale(.97); }
+    button:active {
+        transform: translateY(0) scale(0.97);
+    }
 
     @keyframes titleGlow {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
+        0%,
+        100% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
     }
 
     @media (max-width: 600px) {
-        :global(body) { align-items: flex-start; }
-        main { width: 94%; margin: 18px 0; padding: 26px 16px; border-radius: 22px; }
-        h1 { font-size: 46px; letter-spacing: -3px; }
-        h1::after { font-size: 8px; letter-spacing: 3px; }
-        img { width: 220px; height: 220px; }
-        main > span:not(.excluded-chars) { font-size: 25px; }
+        :global(body) {
+            align-items: flex-start;
+        }
+        main {
+            width: 94%;
+            margin: 18px 0;
+            padding: 26px 16px;
+            border-radius: 22px;
+        }
+        h1 {
+            font-size: 46px;
+            letter-spacing: -3px;
+        }
+        h1::after {
+            font-size: 8px;
+            letter-spacing: 3px;
+        }
     }
 </style>
