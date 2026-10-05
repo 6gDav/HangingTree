@@ -1,4 +1,6 @@
 <script lang="ts">
+    import "$lib/components/incexclude.css"
+
     let { wolrdLogic } = $props();
 </script>
 
@@ -8,32 +10,3 @@
     {/each}
 </section>
 
-<style>
-    .excluded-chars {
-        margin: 3px;
-        padding: 5px 10px;
-        border-radius: 999px;
-        color: #fda4af;
-        background: rgba(244, 63, 94, 0.1);
-        border: 1px solid rgba(244, 63, 94, 0.25);
-        font-size: 14px;
-        font-weight: 700;
-        text-transform: uppercase;
-    }
-
-    span {
-        display: inline-block;
-        margin: 0 5px;
-    }
-
-    section > span:not(.excluded-chars) {
-        min-width: 28px;
-        padding: 0 5px 8px;
-        margin: 4px;
-        font-size: 30px;
-        font-weight: 800;
-        border-bottom: 3px solid #6366f1;
-        color: #f8fafc;
-        text-shadow: 0 0 15px rgba(129, 140, 248, 0.55);
-    }
-</style>
