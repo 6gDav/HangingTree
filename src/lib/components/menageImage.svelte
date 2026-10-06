@@ -19,10 +19,10 @@
         padding: 14px;
         border-radius: 24px;
         border: 1px solid rgba(129, 140, 248, 0.25);
-        background: rgba(22, 26, 43, 0.65);
+        background: rgb(255, 255, 255);
         box-shadow:
             0 0 35px rgba(99, 102, 241, 0.18),
-            inset 0 0 30px rgba(0, 0, 0, 0.35);
+            inset 0 0 30px rgb(255, 255, 255);
         transition:
             transform 0.25s ease,
             box-shadow 0.25s ease;
