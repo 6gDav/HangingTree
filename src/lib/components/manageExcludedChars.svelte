@@ -1,11 +1,11 @@
 <script lang="ts">
     import "$lib/components/incexclude.css"
 
-    let { wolrdLogic } = $props();
+    let { wordLogic } = $props();
 </script>
 
 <section>
-    {#each wolrdLogic.excludedChars as char}
+    {#each wordLogic.excludedChars as char}
         <span class="excluded-chars">{char}</span>
     {/each}
 </section>

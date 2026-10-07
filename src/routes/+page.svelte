@@ -1,7 +1,7 @@
 <script lang="ts">
     import { WordLogic } from "$lib/components/manageSelectedword.svelte";
 
-    import ImageManagger from "$lib/components/menageImage.svelte";
+    import ImageManagger from "$lib/components/manageImage.svelte";
     import ExcludedManagger from "$lib/components/manageExcludedChars.svelte";
     import IncludedManagger from "$lib/components/manageIncludedChard.svelte"
 
