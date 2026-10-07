@@ -1,12 +1,12 @@
 <script lang="ts">
     import { base } from "$app/paths";
 
-    let { wolrdLogic } = $props();
+    let { wordLogic } = $props();
 </script>
 
 <img
-    src="{base}/hangman_states/a{wolrdLogic.errorCounter}.png"
-    alt="Hangman state {wolrdLogic.errorCounter}"
+    src="{base}/hangman_states/a{wordLogic.errorCounter}.png"
+    alt="Hangman state {wordLogic.errorCounter}"
 />
 
 <style>
