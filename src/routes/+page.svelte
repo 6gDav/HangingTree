@@ -1,27 +1,27 @@
 <script lang="ts">
-    import { WordLogic } from "$lib/components/manageSelectedWolrd.svelte";
+    import { WordLogic } from "$lib/components/manageSelectedword.svelte";
 
     import ImageManagger from "$lib/components/menageImage.svelte";
     import ExcludedManagger from "$lib/components/manageExcludedChars.svelte";
     import IncludedManagger from "$lib/components/manageIncludedChard.svelte"
 
     
-    const wolrdLogic: WordLogic = new WordLogic();
+    const wordLogic: WordLogic = new WordLogic();
 
     let inputChar: string = $state<string>("");
     let guessText: string = $state<string>("");
 
     function reset() {
-        wolrdLogic.reset();
+        wordLogic.reset();
         inputChar = "";
         guessText = "";
     }
 
     $effect(() => {
-        if (wolrdLogic.isWon()) {
+        if (wordLogic.isWon()) {
             reset();
             alert("Victory!");
-        } else if (wolrdLogic.isLost()) {
+        } else if (wordLogic.isLost()) {
             reset();
             alert("Game Over!");
         }
@@ -31,7 +31,7 @@
         event.preventDefault();
         if (!inputChar.trim()) return;
 
-        wolrdLogic.submitCharacter(inputChar);
+        wordLogic.submitCharacter(inputChar);
         inputChar = "";
     }
 
@@ -39,7 +39,7 @@
         event.preventDefault();
 
         if (guessText.trim()) {
-            const [case1, case2] = wolrdLogic.submitGuess(guessText);
+            const [case1, case2] = wordLogic.submitGuess(guessText);
 
             if (case1) {
                 reset();
@@ -55,11 +55,11 @@
 <main>
     <h1>HangingTree</h1>
 
-    <ImageManagger {wolrdLogic} />
+    <ImageManagger {wordLogic} />
 
-    <ExcludedManagger {wolrdLogic} />
+    <ExcludedManagger {wordLogic} />
     <br />
-    <IncludedManagger {wolrdLogic} />
+    <IncludedManagger {wordLogic} />
 
     <form onsubmit={(e: SubmitEvent) => handleCharSubmit(e)}>
         <h2>Character?</h2>
