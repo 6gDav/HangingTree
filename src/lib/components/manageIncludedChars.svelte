@@ -1,5 +1,5 @@
 <script lang="ts">
-    import "$lib/components/incexclude.css"
+    import "$lib/components/incexclude.css";
 
     let { wordLogic } = $props();
 </script>
