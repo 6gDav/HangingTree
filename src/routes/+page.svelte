@@ -4,12 +4,18 @@
     import ImageManagger from "$lib/components/manageImage.svelte";
     import ExcludedManagger from "$lib/components/manageExcludedChars.svelte";
     import IncludedManagger from "$lib/components/manageIncludedChars.svelte";
+    import Notification from "$lib/components/notification.svelte";
 
-    
     const wordLogic: WordLogic = new WordLogic();
 
     let inputChar: string = $state<string>("");
     let guessText: string = $state<string>("");
+
+    let notification = $state({
+        show: false,
+        log: "",
+        word: wordLogic.selectedWord,
+    });
 
     function reset() {
         wordLogic.reset();
@@ -20,10 +26,12 @@
     $effect(() => {
         if (wordLogic.isWon()) {
             reset();
-            alert("Victory!");
+            notification.show = true;
+            notification.log = "Victory!";
         } else if (wordLogic.isLost()) {
             reset();
-            alert("Game Over!");
+            notification.show = true;
+            notification.log = "Victory!";
         }
     });
 
@@ -43,9 +51,11 @@
 
             if (case1) {
                 reset();
-                alert("Victory!");
+                notification.show = true;
+                notification.log = "Victory!";
             } else if (case2) {
-                alert("Not Matching!");
+                notification.show = true;
+                notification.log = "Not Matching!!";
             }
             guessText = "";
         }
@@ -74,6 +84,12 @@
         <br />
         <button type="submit">Submit your guess</button>
     </form>
+    <Notification
+        bind:isOpen={notification.show}
+        title="Notification"
+        message={notification.log}
+        selectedWord={notification.word}
+    />
 </main>
 
 <style>
