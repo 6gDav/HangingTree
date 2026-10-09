@@ -37,7 +37,7 @@
         } else if (wordLogic.isLost()) {
             triggerGameOver("Game Over!");
         }
-    });
+    });     
 
     function handleCharSubmit(event: SubmitEvent) {
         event.preventDefault();
@@ -56,8 +56,7 @@
             if (case1) {
                 triggerGameOver("Victory!");
             } else if (case2) {
-                notification.show = true;
-                notification.log = "Not Matching!!";
+                triggerGameOver("Game Over!");
             }
             guessText = "";
         }
