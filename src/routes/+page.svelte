@@ -55,7 +55,7 @@
                 notification.log = "Victory!";
             } else if (case2) {
                 notification.show = true;
-                notification.log = "Not Matching!!";
+                notification.log = "Game over!";
             }
             guessText = "";
         }
