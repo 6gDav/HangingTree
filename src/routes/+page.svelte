@@ -14,8 +14,16 @@
     let notification = $state({
         show: false,
         log: "",
-        word: wordLogic.selectedWord,
+        word: "",
     });
+
+    function triggerGameOver(message: string) {
+        notification.show = true;
+        notification.log = message;
+        notification.word = wordLogic.selectedWord;
+
+        reset();
+    }
 
     function reset() {
         wordLogic.reset();
@@ -25,13 +33,9 @@
 
     $effect(() => {
         if (wordLogic.isWon()) {
-            reset();
-            notification.show = true;
-            notification.log = "Victory!";
+            triggerGameOver("Victory!");
         } else if (wordLogic.isLost()) {
-            reset();
-            notification.show = true;
-            notification.log = "Victory!";
+            triggerGameOver("Game Over!");
         }
     });
 
@@ -50,12 +54,10 @@
             const [case1, case2] = wordLogic.submitGuess(guessText);
 
             if (case1) {
-                reset();
-                notification.show = true;
-                notification.log = "Victory!";
+                triggerGameOver("Victory!");
             } else if (case2) {
                 notification.show = true;
-                notification.log = "Game over!";
+                notification.log = "Not Matching!!";
             }
             guessText = "";
         }
